@@ -1,0 +1,13 @@
+{% if latest_recipe_list %}
+    <ul>
+    {% for recipe in latest_recipe_list %}
+        {% if ingredient.good_ingredient %}
+            <li>{{ ingredient.good_ingredient.amount }} {{ ingredient.good_ingredient.unit }} {{ ingredient.good_ingredient.good.name }} {{ ingredient.good_ingredient.prep_method }}</li>
+        {% elif %}
+            <li>{{ ingredient.recipe_ingredient.multiple }} x {{ ingredient.recipe_ingredient.recipe.name }}</li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No recipes are available.</p>
+{% endif %}
