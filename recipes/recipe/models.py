@@ -9,7 +9,19 @@ class Good(models.Model):
         return self.name
 
 
+class Recipe(models.Model):
+    name = models.CharField(max_length=100)
+    instructions = models.TextField(max_length=1000)
+    servings = models.FloatField()
+    good_ingredients = models.ManyToManyField(Good, through="GoodIngredient", related_name='recipe')
+    recipe_ingredients = models.ManyToManyField("Recipe", through="RecipeIngredient", related_name='recipe')
+
+    def __str__(self):
+        return self.name
+
+
 class GoodIngredient(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     good = models.ForeignKey(Good, on_delete=models.CASCADE)
     amount = models.FloatField()
     unit = models.CharField(max_length=32)
@@ -20,45 +32,10 @@ class GoodIngredient(models.Model):
 
 
 class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    recipe_ingredient = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                                          related_name='recipe_ingredient')
     multiple = models.FloatField()
 
     def __str__(self):
-        return f"{self.multiple} x {self.recipe.name}"
-
-
-class Ingredient(models.Model):
-    good_ingredient = models.ForeignKey(GoodIngredient,
-                                        on_delete=models.CASCADE,
-                                        blank=True, null=True)
-    recipe_ingredient = models.ForeignKey(RecipeIngredient,
-                                          on_delete=models.CASCADE,
-                                          blank=True, null=True)
-
-    class Meta:
-        constraints = [
-            models.CheckConstraint(
-                name="%(app_label)s_%(class)s_thing1_or_thing2",
-                check=(
-                        models.Q(good_ingredient__isnull=True, recipe_ingredient__isnull=False)
-                        | models.Q(good_ingredient__isnull=False, recipe_ingredient__isnull=True)
-                ),
-            )
-        ]
-
-    def __str__(self):
-        if self.good_ingredient is not None:
-            return str(self.good_ingredient)
-        if self.recipe_ingredient is not None:
-            return str(self.recipe_ingredient)
-        return ""
-
-
-class Recipe(models.Model):
-    name = models.CharField(max_length=100)
-    instructions = models.TextField(max_length=1000)
-    servings = models.FloatField()
-    ingredients = models.ManyToManyField(Ingredient)
-
-    def __str__(self):
-        return self.name
+        return f"{self.multiple} x {self.recipe_ingredient.name}"
