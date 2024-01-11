@@ -13,8 +13,8 @@ class Recipe(models.Model):
     name = models.CharField(max_length=100)
     instructions = models.TextField(max_length=1000)
     servings = models.FloatField()
-    good_ingredients = models.ManyToManyField(Good, through="GoodIngredient", related_name='recipe')
-    recipe_ingredients = models.ManyToManyField("Recipe", through="RecipeIngredient", related_name='recipe')
+    good_ingredients = models.ManyToManyField(Good, through="GoodIngredient")
+    recipe_ingredients = models.ManyToManyField("Recipe", through="RecipeIngredient")
 
     def __str__(self):
         return self.name
