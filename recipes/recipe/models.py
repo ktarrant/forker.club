@@ -36,7 +36,7 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     recipe_ingredient = models.ForeignKey(Recipe, on_delete=models.CASCADE,
                                           related_name='recipe_ingredient')
-    multiple = models.FloatField()
+    amount = models.FloatField()
 
     def __str__(self):
-        return f"{self.multiple} x {self.recipe_ingredient.name}"
+        return f"{self.amount} servings {self.recipe_ingredient.name}"

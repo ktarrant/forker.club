@@ -9,7 +9,14 @@
 <em>Makes {{ page.recipe.servings }} servings</em>
 
 <h2>Ingredients</h2>
-TODO
+<ul>
+{% for ingredient in good_ingredient_list %}
+    <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
+{% endfor %}
+{% for ingredient in page.recipe.recipe_ingredients.values %}
+    <li>{{ ingredient.amount }} servings {{ ingredient.recipe_ingredient.name }}</li>
+{% endfor %}
+</ul>
 
 <h2>Instructions</h2>
 {% editable page.recipe.content %}
