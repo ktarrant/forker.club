@@ -1,6 +1,0 @@
-<h1>{{ recipe.name }}</h1>
-<h2>{{ recipe.servings }} servings</h2>
-{% for ingredient in recipe.ingredients.all %}
-    <li>{{ ingredient.good_ingredient.amount }} {{ ingredient.good_ingredient.unit }} {{ ingredient.good_ingredient.good.name }} {{ ingredient.good_ingredient.prep_method }}</li>
-{% endfor %}
-{{ recipe.instructions }}

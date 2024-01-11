@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy
-from mezzanine.pages.models import Page
-from mezzanine.core.fields import RichTextField
+from mezzanine.pages.models import Page, RichText
 
 
 class Good(models.Model):
@@ -12,8 +11,7 @@ class Good(models.Model):
         return self.name
 
 
-class Recipe(Page):
-    content = RichTextField()
+class Recipe(Page, RichText):
     servings = models.FloatField()
     good_ingredients = models.ManyToManyField(Good, through="GoodIngredient",)
     recipe_ingredients = models.ManyToManyField("Recipe", through="RecipeIngredient")
