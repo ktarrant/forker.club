@@ -13,8 +13,8 @@
 {% for ingredient in good_ingredient_list %}
     <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
 {% endfor %}
-{% for ingredient in page.recipe.recipe_ingredients.values %}
-    <li>{{ ingredient.amount }} servings {{ ingredient.recipe_ingredient.name }}</li>
+{% for ingredient in recipe_ingredient_list %}
+    <li>{{ ingredient.amount }} servings <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
 {% endfor %}
 </ul>
 
