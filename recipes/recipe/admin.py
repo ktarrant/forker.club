@@ -1,10 +1,7 @@
 from copy import deepcopy
 
 from django.contrib import admin
-from recipe.models import Recipe, Good
-
-
-recipe_extra_fieldsets = ((None, {"fields": ("good_ingredients", 'recipe_ingredients')}),)
+from recipe.models import Recipe, Good, MealPlan
 
 
 class GoodIngredientInline(admin.TabularInline):
@@ -24,5 +21,17 @@ class RecipeAdmin(admin.ModelAdmin):
     exclude = ('good_ingredients', 'recipe_ingredients')
 
 
+class MealPlanEntryInline(admin.TabularInline):
+    model = MealPlan.meal_plan_entries.through
+    fk_name = "meal_plan"
+    extra = 3  # how many rows to show
+
+
+class MealPlanAdmin(admin.ModelAdmin):
+    inlines = (MealPlanEntryInline, )
+    exclude = ('meal_plan_entries', )
+
+
 admin.site.register(Good)
 admin.site.register(Recipe, RecipeAdmin)
+admin.site.register(MealPlan, MealPlanAdmin)

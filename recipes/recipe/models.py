@@ -27,10 +27,10 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
     recipe_ingredient = models.ForeignKey('Recipe', on_delete=models.CASCADE,
                                           related_name='recipe_ingredient')
-    amount = models.FloatField()
+    servings = models.FloatField()
 
     def __str__(self):
-        return f"{self.amount} servings {self.recipe_ingredient.title}"
+        return f"{self.servings} servings {self.recipe_ingredient.title}"
 
 
 class Recipe(Page, RichText):
@@ -48,12 +48,16 @@ class Recipe(Page, RichText):
     def get_recipe_ingredients(self) -> List[GoodIngredient]:
         return RecipeIngredient.objects.select_related().filter(recipe=self.id)
 
-    def get_combined_good_ingredients(self):
-        ingredients = list(self.get_good_ingredients())
-        for recipe_ingredient in self.get_recipe_ingredients():
-            add_ingredients = list(recipe_ingredient.recipe_ingredient.get_combined_good_ingredients())
-            multiplier = recipe_ingredient.amount / recipe_ingredient.recipe_ingredient.servings
-            for ingredient in add_ingredients:
-                ingredient.amount *= multiplier
-            ingredients += add_ingredients
-        return ingredients
+
+class MealPlanEntry(models.Model):
+    meal_plan = models.ForeignKey('MealPlan', on_delete=models.CASCADE)
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
+    servings = models.FloatField()
+
+
+class MealPlan(Page, RichText):
+    meal_plan_entries = models.ManyToManyField(Recipe, through=MealPlanEntry)
+
+    class Meta:
+        verbose_name = gettext_lazy("MealPlan")
+        verbose_name_plural = gettext_lazy("MealPlans")

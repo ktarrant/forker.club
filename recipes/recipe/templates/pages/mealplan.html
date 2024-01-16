@@ -1,0 +1,39 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags %}
+
+{% block main %}{{ block.super }}
+
+<em>{{ page.description }}</em><br/>
+
+{% editable page.mealplan.content %}
+{{ page.mealplan.content|richtext_filters }}
+{% endeditable %}
+
+<h2>Combined Ingredient List</h2>
+<ul>
+{% for ingredient in combined_ingredient_list %}
+    <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.good.name }}</li>
+{% endfor %}
+</ul>
+
+{% for entry in recipes %}
+    <h2>{{ entry.recipe.title }}</h2>
+    <em>Makes {{ entry.servings }} servings</em>
+    <h3>Ingredients</h3>
+    <ul>
+    {% for ingredient in entry.ingredients %}
+        <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
+    {% endfor %}
+    {% for ingredient in entry.recipe_ingredients %}
+        <li>{{ ingredient.servings }} servings <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
+    {% endfor %}
+    </ul>
+
+    <h3>Instructions</h3>
+    {% editable entry.content %}
+    {{ entry.content|richtext_filters }}
+    {% endeditable %}
+{% endfor %}
+
+{% endblock %}
