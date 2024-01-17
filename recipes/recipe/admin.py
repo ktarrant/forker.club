@@ -5,6 +5,7 @@ from recipe.models import Recipe, Good, MealPlan
 
 
 class GoodIngredientInline(admin.TabularInline):
+    # TODO: Use special UnitField validation
     model = Recipe.good_ingredients.through
     fk_name = "recipe"
     extra = 3  # how many rows to show
@@ -32,6 +33,7 @@ class MealPlanAdmin(admin.ModelAdmin):
     exclude = ('meal_plan_entries', )
 
 
+# TODO: Use special UnitField validation
 admin.site.register(Good)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(MealPlan, MealPlanAdmin)

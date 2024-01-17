@@ -1,15 +1,21 @@
 from typing import List
 from django.db import models
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext_lazy as _
 from mezzanine.pages.models import Page, RichText
 
 
 class Good(models.Model):
     name = models.CharField(max_length=100)
-    package = models.CharField(max_length=32)
+    package = models.CharField(max_length=100)
+    quantity = models.FloatField()
+    unit = models.CharField(max_length=32)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _("Good")
+        verbose_name_plural = _("Goods")
 
 
 class GoodIngredient(models.Model):
@@ -39,8 +45,8 @@ class Recipe(Page, RichText):
     recipe_ingredients = models.ManyToManyField("Recipe", through=RecipeIngredient)
 
     class Meta:
-        verbose_name = gettext_lazy("Recipe")
-        verbose_name_plural = gettext_lazy("Recipes")
+        verbose_name = _("Recipe")
+        verbose_name_plural = _("Recipes")
 
     def get_good_ingredients(self) -> List[GoodIngredient]:
         return GoodIngredient.objects.select_related().filter(recipe=self.id)
@@ -59,5 +65,5 @@ class MealPlan(Page, RichText):
     meal_plan_entries = models.ManyToManyField(Recipe, through=MealPlanEntry)
 
     class Meta:
-        verbose_name = gettext_lazy("MealPlan")
-        verbose_name_plural = gettext_lazy("MealPlans")
+        verbose_name = _("Meal Plan")
+        verbose_name_plural = _("Meal Plans")

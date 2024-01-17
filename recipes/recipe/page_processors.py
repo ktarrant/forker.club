@@ -1,6 +1,10 @@
+import pint
 from django.shortcuts import render
 from mezzanine.pages.page_processors import processor_for
 from .models import Recipe, MealPlan, MealPlanEntry
+
+
+unit_reg = pint.UnitRegistry()
 
 
 @processor_for(Recipe)
@@ -77,13 +81,19 @@ def get_combined_ingredient_list(recipes):
     ingredients = {}
     for recipe in recipes.values():
         for ingredient in recipe['ingredients']:
+            quantity = unit_reg.Quantity(ingredient.amount, ingredient.unit)
             try:
                 existing_ingredient = ingredients[ingredient.good.id]
-                if existing_ingredient.unit != ingredient.unit:
-                    raise NotImplementedError("Unit conversion not yet supported!")
-                existing_ingredient.amount += ingredient.amount
+                grocery_unit = existing_ingredient.unit
+                existing_ingredient.amount += quantity.to(grocery_unit).magnitude
             except KeyError:
+                grocery_unit = ingredient.good.unit
+                if not grocery_unit:
+                    grocery_unit = ingredient.unit
+                ingredient.amount = quantity.to(grocery_unit).magnitude
+                ingredient.unit = grocery_unit
                 ingredients[ingredient.good.id] = ingredient
+
     return ingredients
 
 
