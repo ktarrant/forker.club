@@ -78,7 +78,7 @@ class RecipeTestCase(TestCase):
     def setUp(self):
         add_supported_goods()
         self.pesto_recipe = add_pesto_recipe()
-        self.pasta_recipe = add_pasta_recipe()
+        self.pasta_recipe = add_pasta_recipe(self.pesto_recipe)
         self.meal_plan = MealPlan.objects.create(title="Pesto Week",
                                                  content="Eat pesto all week!")
         MealPlanEntry.objects.create(meal_plan=self.meal_plan,

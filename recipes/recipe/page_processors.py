@@ -96,13 +96,17 @@ def get_combined_ingredient_list(recipes):
             quantity = reg.Quantity(ingredient.amount, ingredient.unit.replace(" ", "_"))
             try:
                 existing_ingredient = ingredients[ingredient.good.id]
-                grocery_unit = existing_ingredient.unit.replace(" ", "_")
-                existing_ingredient.amount += quantity.to(grocery_unit, context_name).magnitude
+                grocery_unit = existing_ingredient['unit'].replace(" ", "_")
+                existing_ingredient['amount'] += quantity.to(grocery_unit, context_name).magnitude
             except KeyError:
                 grocery_unit = ingredient.good.weight_unit
-                ingredient.amount = quantity.to(grocery_unit.replace(" ", "_"), context_name).magnitude
-                ingredient.unit = grocery_unit
-                ingredients[ingredient.good.id] = ingredient
+                new_ingredient = {
+                    "good": ingredient.good,
+                    "amount": quantity.to(grocery_unit.replace(" ", "_"), context_name).magnitude,
+                    "unit": grocery_unit,
+                    "prep_method": ingredient.prep_method,
+                }
+                ingredients[ingredient.good.id] = new_ingredient
 
     return ingredients
 
