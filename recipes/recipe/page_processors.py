@@ -4,9 +4,6 @@ from mezzanine.pages.page_processors import processor_for
 from .models import Recipe, MealPlan, MealPlanEntry
 
 
-unit_reg = pint.UnitRegistry()
-
-
 @processor_for(Recipe)
 def recipe_render(request, page):
     good_ingredient_list = page.recipe.get_good_ingredients()
@@ -79,18 +76,31 @@ def compile_meal_plan(mealplan):
 
 def get_combined_ingredient_list(recipes):
     ingredients = {}
+    reg = pint.UnitRegistry()
     for recipe in recipes.values():
         for ingredient in recipe['ingredients']:
-            quantity = unit_reg.Quantity(ingredient.amount, ingredient.unit)
+            good = ingredient.good
+            context_name = good.name.replace(' ', '_')
+            if good.id not in ingredients:
+                # Have not processed this ingredient before,
+                # so we need to build the context for converting it
+                wq = reg.Quantity(good.weight_quantity, good.weight_unit.replace(" ", "_"))
+                lq = reg.Quantity(good.volume_quantity, good.volume_unit.replace(" ", "_"))
+                context = pint.Context(context_name)
+                context.add_transformation('[length] ** 3', '[mass]',
+                                           lambda ureg, x: x * wq / lq)
+                context.add_transformation('[mass]', '[length] ** 3',
+                                           lambda ureg, x: x * lq / wq)
+                reg.add_context(context)
+
+            quantity = reg.Quantity(ingredient.amount, ingredient.unit.replace(" ", "_"))
             try:
                 existing_ingredient = ingredients[ingredient.good.id]
-                grocery_unit = existing_ingredient.unit
-                existing_ingredient.amount += quantity.to(grocery_unit).magnitude
+                grocery_unit = existing_ingredient.unit.replace(" ", "_")
+                existing_ingredient.amount += quantity.to(grocery_unit, context_name).magnitude
             except KeyError:
-                grocery_unit = ingredient.good.unit
-                if not grocery_unit:
-                    grocery_unit = ingredient.unit
-                ingredient.amount = quantity.to(grocery_unit).magnitude
+                grocery_unit = ingredient.good.weight_unit
+                ingredient.amount = quantity.to(grocery_unit.replace(" ", "_"), context_name).magnitude
                 ingredient.unit = grocery_unit
                 ingredients[ingredient.good.id] = ingredient
 

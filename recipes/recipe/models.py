@@ -7,8 +7,10 @@ from mezzanine.pages.models import Page, RichText
 class Good(models.Model):
     name = models.CharField(max_length=100)
     package = models.CharField(max_length=100)
-    quantity = models.FloatField()
-    unit = models.CharField(max_length=32)
+    weight_quantity = models.FloatField()
+    weight_unit = models.CharField(max_length=32)
+    volume_quantity = models.FloatField()
+    volume_unit = models.CharField(max_length=32)
 
     def __str__(self):
         return self.name

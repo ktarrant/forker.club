@@ -81,8 +81,8 @@ class RecipeTestCase(TestCase):
         """Animals that can speak are correctly identified"""
         lemon = Good.objects.get(name="lemon")
         evoo = Good.objects.get(name="extra-virgin olive oil")
-        self.assertEqual(lemon.unit, "tablespoon")
-        self.assertEqual(evoo.quantity, 16.0)
+        self.assertEqual(lemon.volume_unit, "tablespoon")
+        self.assertEqual(evoo.volume_quantity, 16.0)
 
     def test_get_good_ingredients(self):
         """ Query good ingredients of a recipe """
