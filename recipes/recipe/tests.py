@@ -4,73 +4,81 @@ from recipe.measurements import supported_goods
 from recipe.page_processors import compile_meal_plan, get_combined_ingredient_list
 
 
+def add_supported_goods():
+    for good in supported_goods:
+        Good.objects.create(**good)
+
+
+def add_pesto_recipe():
+    pesto_recipe = Recipe.objects.create(
+        title="Basil Pesto",
+        content="Thoroughly mix all ingredients in a food processor.",
+        servings=4.0,
+    )
+    GoodIngredient.objects.create(recipe=pesto_recipe,
+                                  good=Good.objects.get(name="pine nuts"),
+                                  amount=0.5, unit='cup', prep_method='toasted')
+    GoodIngredient.objects.create(recipe=pesto_recipe,
+                                  good=Good.objects.get(name="lemon"),
+                                  amount=2, unit='tablespoon', prep_method='juiced')
+    GoodIngredient.objects.create(recipe=pesto_recipe,
+                                  good=Good.objects.get(name="garlic"),
+                                  amount=1, unit='teaspoon', prep_method='crushed')
+    GoodIngredient.objects.create(recipe=pesto_recipe,
+                                  good=Good.objects.get(name="sea salt"),
+                                  amount=0.25, unit='teaspoon')
+    GoodIngredient.objects.create(recipe=pesto_recipe,
+                                  good=Good.objects.get(name="black pepper"),
+                                  amount=0.25, unit='teaspoon')
+    GoodIngredient.objects.create(recipe=pesto_recipe,
+                                  good=Good.objects.get(name="fresh basil leaves"),
+                                  amount=2, unit='cup')
+    GoodIngredient.objects.create(recipe=pesto_recipe,
+                                  good=Good.objects.get(name="extra-virgin olive oil"),
+                                  amount=0.25, unit='cup')
+    GoodIngredient.objects.create(recipe=pesto_recipe,
+                                  good=Good.objects.get(name="parmesan cheese"),
+                                  amount=0.25, unit='cup', prep_method="shredded")
+    return pesto_recipe
+
+
+def add_pasta_recipe(pesto_recipe):
+    pasta_recipe = Recipe.objects.create(
+        title="Pesto Pasta",
+        content="Cook pasta according to instructions. Remove pasta, cook everything else. Combine.",
+        servings=1.0,
+    )
+    GoodIngredient.objects.create(recipe=pasta_recipe,
+                                  good=Good.objects.get(name="dry penne pasta"),
+                                  amount=4, unit='ounce')
+    GoodIngredient.objects.create(recipe=pasta_recipe,
+                                  good=Good.objects.get(name="dried chantarelle"),
+                                  amount=2, unit='ounce', prep_method='rehydrated')
+    GoodIngredient.objects.create(recipe=pasta_recipe,
+                                  good=Good.objects.get(name="tomato"),
+                                  amount=0.5, unit='cup', prep_method='chopped')
+    GoodIngredient.objects.create(recipe=pasta_recipe,
+                                  good=Good.objects.get(name="extra-virgin olive oil"),
+                                  amount=2, unit='tablespoon')
+    GoodIngredient.objects.create(recipe=pasta_recipe,
+                                  good=Good.objects.get(name="butter"),
+                                  amount=1, unit='tablespoon')
+    RecipeIngredient.objects.create(recipe=pasta_recipe,
+                                    recipe_ingredient=pesto_recipe,
+                                    servings=1)
+    return pasta_recipe
+
+
+def add_sample_recipes():
+    pesto_recipe = add_pesto_recipe()
+    add_pasta_recipe(pesto_recipe)
+
+
 class RecipeTestCase(TestCase):
-
-    def add_pesto_recipe(self):
-        self.pesto_recipe = Recipe.objects.create(
-            title="Basil Pesto",
-            content="Thoroughly mix all ingredients in a food processor.",
-            servings=4.0,
-        )
-        GoodIngredient.objects.create(recipe=self.pesto_recipe,
-                                      good=Good.objects.get(name="pine nuts"),
-                                      amount=0.5, unit='cup', prep_method='toasted')
-        GoodIngredient.objects.create(recipe=self.pesto_recipe,
-                                      good=Good.objects.get(name="lemon"),
-                                      amount=2, unit='tablespoon', prep_method='juiced')
-        GoodIngredient.objects.create(recipe=self.pesto_recipe,
-                                      good=Good.objects.get(name="garlic"),
-                                      amount=1, unit='teaspoon', prep_method='crushed')
-        GoodIngredient.objects.create(recipe=self.pesto_recipe,
-                                      good=Good.objects.get(name="sea salt"),
-                                      amount=0.25, unit='teaspoon')
-        GoodIngredient.objects.create(recipe=self.pesto_recipe,
-                                      good=Good.objects.get(name="black pepper"),
-                                      amount=0.25, unit='teaspoon')
-        GoodIngredient.objects.create(recipe=self.pesto_recipe,
-                                      good=Good.objects.get(name="fresh basil leaves"),
-                                      amount=2, unit='cup')
-        GoodIngredient.objects.create(recipe=self.pesto_recipe,
-                                      good=Good.objects.get(name="extra-virgin olive oil"),
-                                      amount=0.25, unit='cup')
-        GoodIngredient.objects.create(recipe=self.pesto_recipe,
-                                      good=Good.objects.get(name="parmesan cheese"),
-                                      amount=0.25, unit='cup', prep_method="shredded")
-
-    def add_pasta_recipe(self):
-        self.pasta_recipe = Recipe.objects.create(
-            title="Pesto Pasta",
-            content="Cook pasta according to instructions. Remove pasta, cook everything else. Combine.",
-            servings=1.0,
-        )
-        GoodIngredient.objects.create(recipe=self.pasta_recipe,
-                                      good=Good.objects.get(name="dry penne pasta"),
-                                      amount=4, unit='ounce')
-        GoodIngredient.objects.create(recipe=self.pasta_recipe,
-                                      good=Good.objects.get(name="dried chantarelle"),
-                                      amount=2, unit='ounce', prep_method='rehydrated')
-        GoodIngredient.objects.create(recipe=self.pasta_recipe,
-                                      good=Good.objects.get(name="tomato"),
-                                      amount=0.5, unit='cup', prep_method='chopped')
-        GoodIngredient.objects.create(recipe=self.pasta_recipe,
-                                      good=Good.objects.get(name="extra-virgin olive oil"),
-                                      amount=2, unit='tablespoon')
-        GoodIngredient.objects.create(recipe=self.pasta_recipe,
-                                      good=Good.objects.get(name="butter"),
-                                      amount=1, unit='tablespoon')
-        RecipeIngredient.objects.create(recipe=self.pasta_recipe,
-                                        recipe_ingredient=self.pesto_recipe,
-                                        servings=1)
-
-    @staticmethod
-    def populate_goods():
-        for good in supported_goods:
-            Good.objects.create(**good)
-
     def setUp(self):
-        RecipeTestCase.populate_goods()
-        self.add_pesto_recipe()
-        self.add_pasta_recipe()
+        add_supported_goods()
+        self.pesto_recipe = add_pesto_recipe()
+        self.pasta_recipe = add_pasta_recipe()
         self.meal_plan = MealPlan.objects.create(title="Pesto Week",
                                                  content="Eat pesto all week!")
         MealPlanEntry.objects.create(meal_plan=self.meal_plan,
