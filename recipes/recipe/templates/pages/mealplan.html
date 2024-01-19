@@ -1,6 +1,7 @@
 {% extends "pages/page.html" %}
 
 {% load mezzanine_tags %}
+{% load ingredient_tags %}
 
 {% block main %}{{ block.super }}
 
@@ -13,7 +14,7 @@
 <h2>Combined Ingredient List</h2>
 <ul>
 {% for ingredient in combined_ingredient_list %}
-    <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.good.name }}</li>
+    <li>{{ ingredient.amount|servings }} {{ ingredient.unit }} {{ ingredient.good.name }}</li>
 {% endfor %}
 </ul>
 
@@ -23,10 +24,10 @@
     <h3>Ingredients</h3>
     <ul>
     {% for ingredient in entry.ingredients %}
-        <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
+        <li>{{ ingredient.amount|servings }} {{ ingredient.unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
     {% endfor %}
     {% for ingredient in entry.recipe_ingredients %}
-        <li>{{ ingredient.servings }} servings <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
+        <li>{{ ingredient.servings|servings }} servings <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
     {% endfor %}
     </ul>
 

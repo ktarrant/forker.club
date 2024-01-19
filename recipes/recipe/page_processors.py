@@ -4,26 +4,10 @@ from mezzanine.pages.page_processors import processor_for
 from .models import Recipe, MealPlan, MealPlanEntry
 
 
-def format_ingredient_amount(amount):
-    if amount <= 0.0:
-        return "{}".format(amount)
-    elif amount < 1.0:
-        return "1/{:.0f}".format(1.0 / amount)
-    else:
-        return "{:.2g}".format(amount)
-
-
 @processor_for(Recipe)
 def recipe_render(request, page):
     good_ingredient_list = page.recipe.get_good_ingredients()
     recipe_ingredient_list = page.recipe.get_recipe_ingredients()
-
-    # Format ingredient amounts
-    for ingredient in good_ingredient_list:
-        ingredient.amount = format_ingredient_amount(ingredient.amount)
-
-    for ingredient in recipe_ingredient_list:
-        ingredient.servings = format_ingredient_amount(ingredient.servings)
 
     context = {"good_ingredient_list": good_ingredient_list,
                "recipe_ingredient_list": recipe_ingredient_list}
@@ -141,17 +125,6 @@ def meal_plan_render(request, page):
         recipes[recipe_id]['content'] = recipes[recipe_id]['recipe'].content
 
     combined_ingredient_list = get_combined_ingredient_list(recipes)
-
-    # Format ingredient amounts
-    for recipe_id in recipes:
-        for ingredient in recipes[recipe_id]['ingredients']:
-            ingredient['amount'] = format_ingredient_amount(ingredient['amount'])
-
-        for ingredient in recipes[recipe_id]['recipe_ingredients']:
-            ingredient.servings = format_ingredient_amount(ingredient.servings)
-
-    for ingredient in combined_ingredient_list:
-        ingredient['amount'] = format_ingredient_amount(ingredient['amount'])
 
     context = {"recipes": list(recipes.values()),
                "combined_ingredient_list": list(combined_ingredient_list)}
