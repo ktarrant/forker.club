@@ -84,6 +84,30 @@ SITE_TAGLINE = "Easy Recipes and Economical Meal Plans"
 # INSTALLED_APPS setting.
 USE_MODELTRANSLATION = False
 
+# Model to use for accounts profiles
+ACCOUNTS_PROFILE_MODEL = "recipe.MyProfile"
+
+# Require activation for user accounts
+# TODO: We want to enable this, but we need to set up the email server first.
+# https://docs.djangoproject.com/en/5.0/topics/email/
+ACCOUNTS_VERIFICATION_REQUIRED = False
+
+# Fields to exclude from profile creation
+ACCOUNTS_PROFILE_FORM_EXCLUDE_FIELDS = (
+    "first_name",
+    "last_name",
+    "signup_date",
+)
+
+# Writing comments requires an account
+COMMENTS_ACCOUNT_REQUIRED = True
+
+# We maybe could bring this back but it's too cluttered right now
+COMMENTS_USE_RATINGS = False
+
+# Setting ratings requires an account
+RATINGS_ACCOUNT_REQUIRED = True
+
 # Ratings range for models that use the RatingsField
 RATINGS_RANGE = range(1, 6)
 
@@ -227,6 +251,7 @@ TEMPLATES = [
 
 INSTALLED_APPS = [
     'recipe.apps.RecipeConfig',
+    "mezzanine.accounts",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

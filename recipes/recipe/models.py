@@ -73,3 +73,8 @@ class MealPlan(Page, RichText):
     class Meta:
         verbose_name = _("Meal Plan")
         verbose_name_plural = _("Meal Plans")
+
+
+class MyProfile(models.Model):
+    user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
+    bio = models.TextField(null="", blank="")
