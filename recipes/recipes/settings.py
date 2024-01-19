@@ -77,12 +77,15 @@ from django.utils.translation import gettext_lazy as _
 #
 # BLOG_USE_FEATURED_IMAGE = True
 
+SITE_TITLE = "forker.club"
+SITE_TAGLINE = "Easy Recipes and Economical Meal Plans"
+
 # If True, the django-modeltranslation will be added to the
 # INSTALLED_APPS setting.
 USE_MODELTRANSLATION = False
 
 # Ratings range for models that use the RatingsField
-RATINGS_RANGE = range(1, 5)
+RATINGS_RANGE = range(1, 6)
 
 ########################
 # MAIN DJANGO SETTINGS #
