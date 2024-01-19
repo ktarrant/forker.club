@@ -81,6 +81,8 @@ from django.utils.translation import gettext_lazy as _
 # INSTALLED_APPS setting.
 USE_MODELTRANSLATION = False
 
+# Ratings range for models that use the RatingsField
+RATINGS_RANGE = range(1, 5)
 
 ########################
 # MAIN DJANGO SETTINGS #

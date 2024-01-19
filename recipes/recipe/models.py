@@ -2,6 +2,7 @@ from typing import List
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from mezzanine.pages.models import Page, RichText
+from mezzanine.generic.fields import CommentsField, RatingField
 
 
 class Good(models.Model):
@@ -45,6 +46,8 @@ class Recipe(Page, RichText):
     servings = models.FloatField()
     good_ingredients = models.ManyToManyField(Good, through=GoodIngredient)
     recipe_ingredients = models.ManyToManyField("Recipe", through=RecipeIngredient)
+    rating = RatingField()
+    comments = CommentsField()
 
     class Meta:
         verbose_name = _("Recipe")
@@ -65,6 +68,7 @@ class MealPlanEntry(models.Model):
 
 class MealPlan(Page, RichText):
     meal_plan_entries = models.ManyToManyField(Recipe, through=MealPlanEntry)
+    comments = CommentsField()
 
     class Meta:
         verbose_name = _("Meal Plan")
