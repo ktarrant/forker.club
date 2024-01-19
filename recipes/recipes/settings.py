@@ -250,6 +250,7 @@ TEMPLATES = [
 ################
 
 INSTALLED_APPS = [
+    'theme.apps.ThemeConfig',
     'recipe.apps.RecipeConfig',
     "mezzanine.accounts",
     "django.contrib.admin",
