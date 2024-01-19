@@ -4,10 +4,27 @@ from mezzanine.pages.page_processors import processor_for
 from .models import Recipe, MealPlan, MealPlanEntry
 
 
+def format_ingredient_amount(amount):
+    if amount <= 0.0:
+        return "{}".format(amount)
+    elif amount < 1.0:
+        return "1/{:.0f}".format(1.0 / amount)
+    else:
+        return "{:.2g}".format(amount)
+
+
 @processor_for(Recipe)
 def recipe_render(request, page):
     good_ingredient_list = page.recipe.get_good_ingredients()
     recipe_ingredient_list = page.recipe.get_recipe_ingredients()
+
+    # Format ingredient amounts
+    for ingredient in good_ingredient_list:
+        ingredient.amount = format_ingredient_amount(ingredient.amount)
+
+    for ingredient in recipe_ingredient_list:
+        ingredient.servings = format_ingredient_amount(ingredient.servings)
+
     context = {"good_ingredient_list": good_ingredient_list,
                "recipe_ingredient_list": recipe_ingredient_list}
     return render(request, "pages/recipe.html", context=context)
@@ -67,9 +84,15 @@ def compile_meal_plan(mealplan):
     for recipe in recipes.values():
         ingredients = recipe['recipe'].get_good_ingredients()
         multiplier = recipe['servings'] / recipe['recipe'].servings
-        for ingredient in ingredients:
-            ingredient.amount *= multiplier
-        recipe['ingredients'] = ingredients
+        recipe['ingredients'] = [
+            {
+                "good": ingredient.good,
+                "amount": ingredient.amount * multiplier,
+                "unit": ingredient.unit,
+                "prep_method": ingredient.prep_method,
+            }
+            for ingredient in ingredients
+        ]
 
     return recipes
 
@@ -79,7 +102,7 @@ def get_combined_ingredient_list(recipes):
     reg = pint.UnitRegistry()
     for recipe in recipes.values():
         for ingredient in recipe['ingredients']:
-            good = ingredient.good
+            good = ingredient['good']
             context_name = good.name.replace(' ', '_')
             if good.id not in ingredients:
                 # Have not processed this ingredient before,
@@ -93,22 +116,22 @@ def get_combined_ingredient_list(recipes):
                                            lambda ureg, x: x * lq / wq)
                 reg.add_context(context)
 
-            quantity = reg.Quantity(ingredient.amount, ingredient.unit.replace(" ", "_"))
+            quantity = reg.Quantity(ingredient['amount'], ingredient['unit'].replace(" ", "_"))
             try:
-                existing_ingredient = ingredients[ingredient.good.id]
+                existing_ingredient = ingredients[ingredient['good'].id]
                 grocery_unit = existing_ingredient['unit'].replace(" ", "_")
                 existing_ingredient['amount'] += quantity.to(grocery_unit, context_name).magnitude
             except KeyError:
-                grocery_unit = ingredient.good.weight_unit
+                grocery_unit = ingredient['good'].weight_unit
                 new_ingredient = {
-                    "good": ingredient.good,
+                    "good": ingredient['good'],
                     "amount": quantity.to(grocery_unit.replace(" ", "_"), context_name).magnitude,
                     "unit": grocery_unit,
-                    "prep_method": ingredient.prep_method,
+                    "prep_method": ingredient['prep_method'],
                 }
-                ingredients[ingredient.good.id] = new_ingredient
+                ingredients[ingredient['good'].id] = new_ingredient
 
-    return ingredients
+    return list(ingredients.values())
 
 
 @processor_for(MealPlan)
@@ -116,7 +139,20 @@ def meal_plan_render(request, page):
     recipes = compile_meal_plan(page.mealplan)
     for recipe_id in recipes:
         recipes[recipe_id]['content'] = recipes[recipe_id]['recipe'].content
+
     combined_ingredient_list = get_combined_ingredient_list(recipes)
+
+    # Format ingredient amounts
+    for recipe_id in recipes:
+        for ingredient in recipes[recipe_id]['ingredients']:
+            ingredient['amount'] = format_ingredient_amount(ingredient['amount'])
+
+        for ingredient in recipes[recipe_id]['recipe_ingredients']:
+            ingredient.servings = format_ingredient_amount(ingredient.servings)
+
+    for ingredient in combined_ingredient_list:
+        ingredient['amount'] = format_ingredient_amount(ingredient['amount'])
+
     context = {"recipes": list(recipes.values()),
-               "combined_ingredient_list": list(combined_ingredient_list.values())}
+               "combined_ingredient_list": list(combined_ingredient_list)}
     return render(request, "pages/mealplan.html", context=context)
