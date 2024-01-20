@@ -44,7 +44,7 @@ def get_combined_recipe_ingredients(recipe_ingredients, multiplier=1.0):
 
 
 def compile_meal_plan(mealplan):
-    entries = MealPlanEntry.objects.select_related().filter(meal_plan=mealplan.id)
+    entries = MealPlanEntry.objects.select_related().filter(mealplan=mealplan.id)
     recipes = {}
     for entry in entries:
         multiplier = (entry.servings / entry.recipe.servings)

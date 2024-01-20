@@ -61,13 +61,13 @@ class Recipe(Page, RichText):
 
 
 class MealPlanEntry(models.Model):
-    meal_plan = models.ForeignKey('MealPlan', on_delete=models.CASCADE)
+    mealplan = models.ForeignKey('MealPlan', on_delete=models.CASCADE)
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
     servings = models.FloatField()
 
 
 class MealPlan(Page, RichText):
-    meal_plan_entries = models.ManyToManyField(Recipe, through=MealPlanEntry)
+    mealplan_entries = models.ManyToManyField(Recipe, through=MealPlanEntry)
     comments = CommentsField()
 
     class Meta:

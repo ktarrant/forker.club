@@ -71,7 +71,21 @@ def add_pasta_recipe(pesto_recipe):
 
 def add_sample_recipes():
     pesto_recipe = add_pesto_recipe()
-    add_pasta_recipe(pesto_recipe)
+    return add_pasta_recipe(pesto_recipe)
+
+
+def add_sample_mealplan(*recipes):
+    mealplan = MealPlan.objects.create(title="Sample Mealplan")
+    for recipe in recipes:
+        MealPlanEntry.objects.create(mealplan=mealplan,
+                                     recipe=recipe,
+                                     servings=1)
+
+
+def add_sample_data():
+    add_supported_goods()
+    recipe = add_sample_recipes()
+    add_sample_mealplan(recipe)
 
 
 class RecipeTestCase(TestCase):

@@ -23,14 +23,14 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class MealPlanEntryInline(admin.TabularInline):
-    model = MealPlan.meal_plan_entries.through
-    fk_name = "meal_plan"
+    model = MealPlan.mealplan_entries.through
+    fk_name = "mealplan"
     extra = 3  # how many rows to show
 
 
 class MealPlanAdmin(admin.ModelAdmin):
     inlines = (MealPlanEntryInline, )
-    exclude = ('meal_plan_entries', )
+    exclude = ('mealplan_entries', )
 
 
 # TODO: Use special UnitField validation
