@@ -1,4 +1,5 @@
 from django.test import TestCase
+from mezzanine.pages.models import Page
 from recipe.models import Good, GoodIngredient, RecipeIngredient, Recipe, MealPlan, MealPlanEntry
 from recipe.measurements import supported_goods
 from recipe.page_processors import compile_meal_plan, get_combined_ingredient_list
@@ -128,3 +129,18 @@ class RecipeTestCase(TestCase):
         recipes = compile_meal_plan(self.meal_plan)
         combined_ingredient_list = get_combined_ingredient_list(recipes)
         self.assertGreater(len(combined_ingredient_list), 0)
+
+    def test_recipe_search_title(self):
+        query = "pesto"
+        results = Page.objects.search(query)
+        self.assertGreater(len(results), 0)
+
+    def test_recipe_search_ingredient(self):
+        query = "pine nuts"
+        results = Recipe.objects.search(query)
+        self.assertGreater(len(results), 0)
+
+    def test_recipe_search_ingredient_via_page(self):
+        query = "pine nuts"
+        results = Page.objects.search(query, search_fields=('recipe__good_ingredients__name', ))
+        self.assertGreater(len(results), 0)

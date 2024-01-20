@@ -48,6 +48,7 @@ class Recipe(Page, RichText):
     recipe_ingredients = models.ManyToManyField("Recipe", through=RecipeIngredient)
     rating = RatingField()
     comments = CommentsField()
+    search_fields = ('good_ingredients__name', 'recipe_ingredients__title', )
 
     class Meta:
         verbose_name = _("Recipe")
@@ -69,6 +70,7 @@ class MealPlanEntry(models.Model):
 class MealPlan(Page, RichText):
     mealplan_entries = models.ManyToManyField(Recipe, through=MealPlanEntry)
     comments = CommentsField()
+    search_fields = ('mealplan_entries__title', )
 
     class Meta:
         verbose_name = _("Meal Plan")
