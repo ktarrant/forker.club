@@ -144,3 +144,8 @@ class RecipeTestCase(TestCase):
         query = "pine nuts"
         results = Page.objects.search(query, search_fields=('recipe__good_ingredients__name', ))
         self.assertGreater(len(results), 0)
+
+    def test_mealplan_search(self):
+        query = "pesto"
+        results = MealPlan.objects.search(query)
+        self.assertGreater(len(results), 0)
