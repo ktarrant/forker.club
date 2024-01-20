@@ -28,8 +28,7 @@
 {{ page.recipe.content|richtext_filters }}
 {% endeditable %}
 
-<h2>Comments</h2>
-<em>There are {{ page.recipe.comments_count }} comment{{ page.recipe.comments_count|pluralize }}</em>
+<br/>
 {% comments_for page.recipe %}
 
 {% endblock %}

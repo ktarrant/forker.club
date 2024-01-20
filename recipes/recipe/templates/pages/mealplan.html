@@ -38,8 +38,7 @@
     {% endeditable %}
 {% endfor %}
 
-<h2>Comments</h2>
-<h3>There are {{ page.mealplan.comments_count }} comment{{ page.mealplan.comments_count|pluralize }}</h3>
+<br/>
 {% comments_for page.mealplan %}
 
 {% endblock %}
