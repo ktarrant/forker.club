@@ -79,4 +79,4 @@ class MealPlan(Page, RichText):
 
 class MyProfile(models.Model):
     user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
-    bio = models.TextField(null="", blank="")
+    bio = models.TextField(default="", null="", blank="")

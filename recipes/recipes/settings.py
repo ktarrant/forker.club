@@ -111,6 +111,9 @@ RATINGS_ACCOUNT_REQUIRED = True
 # Ratings range for models that use the RatingsField
 RATINGS_RANGE = range(1, 6)
 
+# Which form class to use for comments
+COMMENT_FORM_CLASS = "recipe.forms.SlimCommentForm"
+
 ########################
 # MAIN DJANGO SETTINGS #
 ########################
