@@ -95,7 +95,7 @@ class RecipeTestCase(TestCase):
         self.pasta_recipe = add_pasta_recipe(self.pesto_recipe)
         self.meal_plan = MealPlan.objects.create(title="Pesto Week",
                                                  content="Eat pesto all week!")
-        MealPlanEntry.objects.create(meal_plan=self.meal_plan,
+        MealPlanEntry.objects.create(mealplan=self.meal_plan,
                                      recipe=self.pasta_recipe,
                                      servings=1)
 
