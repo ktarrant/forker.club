@@ -10,9 +10,9 @@ from mezzanine.utils.cache import add_cache_bypass
 from mezzanine.utils.deprecation import is_authenticated
 from mezzanine.utils.email import split_addresses, send_mail_template
 from mezzanine.utils.views import ip_for_request
+from mezzanine.conf import settings
 
 from recipe.measurements import supported_units
-import recipes.settings as settings
 
 
 unit_reg = pint.UnitRegistry()
@@ -97,23 +97,23 @@ class SlimCommentForm(ThreadedCommentForm):
         comment_was_posted.send(
             sender=comment.__class__, comment=comment, request=request
         )
-        # TODO: Restore this when email settings are set up
-        # notify_emails = split_addresses(settings.COMMENTS_NOTIFICATION_EMAILS)
-        # if notify_emails:
-        #     subject = gettext("New comment for: ") + str(obj)
-        #     context = {
-        #         "comment": comment,
-        #         "comment_url": add_cache_bypass(comment.get_absolute_url()),
-        #         "request": request,
-        #         "obj": obj,
-        #     }
-        #     send_mail_template(
-        #         subject,
-        #         "email/comment_notification",
-        #         settings.DEFAULT_FROM_EMAIL,
-        #         notify_emails,
-        #         context,
-        #     )
+
+        notify_emails = split_addresses(settings.COMMENTS_NOTIFICATION_EMAILS)
+        if notify_emails:
+            subject = gettext("New comment for: ") + str(obj)
+            context = {
+                "comment": comment,
+                "comment_url": add_cache_bypass(comment.get_absolute_url()),
+                "request": request,
+                "obj": obj,
+            }
+            send_mail_template(
+                subject,
+                "email/comment_notification",
+                settings.DEFAULT_FROM_EMAIL,
+                notify_emails,
+                context,
+            )
         return comment
 
 
