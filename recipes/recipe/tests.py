@@ -1,8 +1,40 @@
 from django.test import TestCase
 from mezzanine.pages.models import Page
 from recipe.models import Good, GoodIngredient, RecipeIngredient, Recipe, MealPlan, MealPlanEntry
-from recipe.measurements import supported_goods
 from recipe.page_processors import compile_meal_plan, get_combined_ingredient_list
+
+
+supported_goods = [
+    # Produce
+    dict(name="tomato", package="whole", category="produce",
+         volume_quantity=1, volume_unit="cup", weight_quantity=5, weight_unit="ounce"),
+    dict(name="lemon", package="whole", category="produce",
+         volume_quantity=3, volume_unit="fluid_ounce", weight_quantity=2.5, weight_unit="ounce"),
+    dict(name="garlic", package="whole", category="produce",
+         volume_quantity=10, volume_unit="teaspoon", weight_quantity=4, weight_unit="ounce"),
+    dict(name="fresh basil leaves", package="whole", category="produce",
+         volume_quantity=2, volume_unit="teaspoon", weight_quantity=0.5, weight_unit="ounce"),
+    # Pantry
+    dict(name="dried chantarelle", package="16 ounce bag", category="pantry",
+         volume_quantity=2, volume_unit='quart', weight_quantity=16.0, weight_unit="ounce"),
+    dict(name="dry penne pasta", package="16 ounce box", category="pantry",
+         volume_quantity=1.5, volume_unit='quart', weight_quantity=16.0, weight_unit="ounce"),
+    dict(name="pine nuts", package="8 ounce bag", category="pantry",
+         volume_quantity=1, volume_unit='pint', weight_quantity=8, weight_unit="ounce"),
+    # spices
+    dict(name="sea salt", package="24 fluid ounce can", category="spices",
+         volume_quantity=1.5, volume_unit='pint', weight_quantity=24, weight_unit="ounce"),
+    dict(name="black pepper", package="3 ounce grinder", category="spices",
+         volume_quantity=1, volume_unit='cup', weight_quantity=3, weight_unit="ounce"),
+    # Oils
+    dict(name="extra-virgin olive oil", package="16 fluid ounce bottle", category="oils",
+         volume_quantity=16.0, volume_unit="fluid_ounce", weight_quantity=13, weight_unit='ounce'),
+    # Dairy
+    dict(name="butter", package="stick", category="dairy",
+         volume_quantity=8, volume_unit="tablespoon", weight_quantity=8, weight_unit='ounce'),
+    dict(name="parmesan cheese", package="wedge", category="dairy",
+         volume_quantity=3, volume_unit="cup", weight_quantity=4, weight_unit="ounce"),
+]
 
 
 def add_supported_goods():
@@ -104,7 +136,7 @@ class RecipeTestCase(TestCase):
         """Animals that can speak are correctly identified"""
         lemon = Good.objects.get(name="lemon")
         evoo = Good.objects.get(name="extra-virgin olive oil")
-        self.assertEqual(lemon.volume_unit, "tablespoon")
+        self.assertEqual(lemon.volume_unit, "fluid_ounce")
         self.assertEqual(evoo.volume_quantity, 16.0)
 
     def test_get_good_ingredients(self):
