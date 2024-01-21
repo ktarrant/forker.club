@@ -4,19 +4,25 @@ from django.utils.translation import gettext_lazy as _
 from mezzanine.pages.models import Page, RichText
 from mezzanine.generic.fields import CommentsField, RatingField
 
-from recipe.measurements import supported_units
+from recipe.measurements import supported_units, good_categories
 
 UNIT_CHOICES = [(str(unit), str(unit).replace("_", " "))
                 for unit in supported_units]
+
+CATEGORY_CHOICES = [
+    (category, category[0].upper() + category[1:])
+    for category in good_categories
+]
 
 
 class Good(models.Model):
     name = models.CharField(max_length=100)
     package = models.CharField(max_length=100)
     weight_quantity = models.FloatField()
-    weight_unit = models.CharField(max_length=32, choices=UNIT_CHOICES)
+    weight_unit = models.CharField(max_length=12, choices=UNIT_CHOICES)
     volume_quantity = models.FloatField()
-    volume_unit = models.CharField(max_length=32, choices=UNIT_CHOICES)
+    volume_unit = models.CharField(max_length=12, choices=UNIT_CHOICES)
+    category = models.CharField(max_length=12, choices=CATEGORY_CHOICES)
 
     def __str__(self):
         return self.name
@@ -30,7 +36,7 @@ class GoodIngredient(models.Model):
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
     good = models.ForeignKey(Good, on_delete=models.CASCADE)
     amount = models.FloatField()
-    unit = models.CharField(max_length=32, choices=UNIT_CHOICES)
+    unit = models.CharField(max_length=12, choices=UNIT_CHOICES)
     prep_method = models.CharField(max_length=100, blank=True, default='')
 
     def __str__(self):
