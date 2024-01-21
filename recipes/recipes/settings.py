@@ -84,6 +84,16 @@ SITE_TAGLINE = "Easy Recipes and Economical Meal Plans"
 # INSTALLED_APPS setting.
 USE_MODELTRANSLATION = False
 
+# Remove the left hand tree as an option
+PAGE_MENU_TEMPLATES = (
+    (1, 'Top navigation bar', 'pages/menus/dropdown.html'),
+    # (2, 'Left-hand tree', 'pages/menus/tree.html'),
+    (2, 'Footer', 'pages/menus/footer.html')
+)
+
+# By default, do not add pages to the tree menus
+PAGE_MENU_TEMPLATES_DEFAULT = []
+
 # Model to use for accounts profiles
 ACCOUNTS_PROFILE_MODEL = "recipe.MyProfile"
 
