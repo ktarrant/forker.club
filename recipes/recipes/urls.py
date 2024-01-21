@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.views.i18n import set_language
 
 from mezzanine.conf import settings
+from mezzanine.blog.views import blog_post_list
 
 # Uncomment to use blog as home page. See also urlpatterns section below.
 # from mezzanine.blog import views as blog_views
@@ -26,38 +27,8 @@ if settings.USE_MODELTRANSLATION:
     ]
 
 urlpatterns += [
-    # We don't want to presume how your homepage works, so here are a
-    # few patterns you can use to set it up.
-    # HOMEPAGE AS STATIC TEMPLATE
-    # ---------------------------
-    # This pattern simply loads the index.html template. It isn't
-    # commented out like the others, so it's the default. You only need
-    # one homepage pattern, so if you use a different one, comment this
-    # one out.
-    path("", TemplateView.as_view(template_name="index.html"), name="home"),
-    # HOMEPAGE AS AN EDITABLE PAGE IN THE PAGE TREE
-    # ---------------------------------------------
-    # This pattern gives us a normal ``Page`` object, so that your
-    # homepage can be managed via the page tree in the admin. If you
-    # use this pattern, you'll need to create a page in the page tree,
-    # and specify its URL (in the Meta Data section) as "/", which
-    # is the value used below in the ``{"slug": "/"}`` part.
-    # Also note that the normal rule of adding a custom
-    # template per page with the template name using the page's slug
-    # doesn't apply here, since we can't have a template called
-    # "/.html" - so for this case, the template "pages/index.html"
-    # should be used if you want to customize the homepage's template.
-    # NOTE: Don't forget to import the view function too!
-    # path("", mezzanine.pages.views.page, {"slug": "/"}, name="home"),
-    # HOMEPAGE FOR A BLOG-ONLY SITE
-    # -----------------------------
-    # This pattern points the homepage to the blog post listing page,
-    # and is useful for sites that are primarily blogs. If you use this
-    # pattern, you'll also need to set BLOG_SLUG = "" in your
-    # ``settings.py`` module, and delete the blog page object from the
-    # page tree in the admin if it was installed.
-    # NOTE: Don't forget to import the view function too!
-    # path("", blog_views.blog_post_list, name="home"),
+    # Point the home page to the blog views listing
+    path("", blog_post_list, name="home"),
     # MEZZANINE'S URLS
     # ----------------
     # ADD YOUR OWN URLPATTERNS *ABOVE* THE LINE BELOW.
