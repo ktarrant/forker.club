@@ -91,8 +91,8 @@ def get_combined_ingredient_list(recipes):
             if good.id not in ingredients:
                 # Have not processed this ingredient before,
                 # so we need to build the context for converting it
-                wq = reg.Quantity(good.weight_quantity, good.weight_unit.replace(" ", "_"))
-                lq = reg.Quantity(good.volume_quantity, good.volume_unit.replace(" ", "_"))
+                wq = reg.Quantity(good.weight_quantity, good.weight_unit)
+                lq = reg.Quantity(good.volume_quantity, good.volume_unit)
                 context = pint.Context(context_name)
                 context.add_transformation('[length] ** 3', '[mass]',
                                            lambda ureg, x: x * wq / lq)
@@ -100,16 +100,16 @@ def get_combined_ingredient_list(recipes):
                                            lambda ureg, x: x * lq / wq)
                 reg.add_context(context)
 
-            quantity = reg.Quantity(ingredient['amount'], ingredient['unit'].replace(" ", "_"))
+            quantity = reg.Quantity(ingredient['amount'], ingredient['unit'])
             try:
                 existing_ingredient = ingredients[ingredient['good'].id]
-                grocery_unit = existing_ingredient['unit'].replace(" ", "_")
+                grocery_unit = existing_ingredient['unit']
                 existing_ingredient['amount'] += quantity.to(grocery_unit, context_name).magnitude
             except KeyError:
                 grocery_unit = ingredient['good'].weight_unit
                 new_ingredient = {
                     "good": ingredient['good'],
-                    "amount": quantity.to(grocery_unit.replace(" ", "_"), context_name).magnitude,
+                    "amount": quantity.to(grocery_unit, context_name).magnitude,
                     "unit": grocery_unit,
                     "prep_method": ingredient['prep_method'],
                 }

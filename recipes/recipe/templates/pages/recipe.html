@@ -16,7 +16,7 @@
 <h2>Ingredients</h2>
 <ul>
 {% for ingredient in good_ingredient_list %}
-    <li>{{ ingredient.amount|servings }} {{ ingredient.unit }}{{ ingredient.amount|pluralize }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
+    <li>{{ ingredient.amount|servings }} {{ ingredient.unit|unit }}{{ ingredient.amount|pluralize }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
 {% endfor %}
 {% for ingredient in recipe_ingredient_list %}
     <li>{{ ingredient.servings|servings }} serving{{ ingredient.serving|pluralize }} <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
