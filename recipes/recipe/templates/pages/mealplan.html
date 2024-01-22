@@ -13,14 +13,14 @@
 {% endeditable %}
 
 <h2>Combined Ingredient List</h2>
-<ul>
+<ul class="list-group">
 {% for category, ingredients in combined_ingredient_list.items %}
     {% if ingredients %}
-    <li>
-        {{ category }}
-        <ul>
+    <li class="list-group-item">
+        {{ category|title }}
+        <ul class="list-group">
         {% for ingredient in ingredients %}
-            <li>{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }}</li>
+            <li class="list-group-item">{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }}</li>
         {% endfor %}
         </ul>
     </li>
@@ -32,12 +32,12 @@
     <h2>{{ entry.recipe.title }}</h2>
     <em>Makes {{ entry.servings }} servings</em>
     <h3>Ingredients</h3>
-    <ul>
+    <ul class="list-group">
     {% for ingredient in entry.ingredients %}
-        <li>{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
+        <li class="list-group-item">{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
     {% endfor %}
     {% for ingredient in entry.recipe_ingredients %}
-        <li>{{ ingredient.servings|servings }} servings <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
+        <li class="list-group-item">{{ ingredient.servings|servings }} servings <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
     {% endfor %}
     </ul>
 

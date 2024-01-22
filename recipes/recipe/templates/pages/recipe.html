@@ -14,12 +14,12 @@
 <em>Makes {{ page.recipe.servings }} servings</em>
 
 <h2>Ingredients</h2>
-<ul>
+<ul class="list-group">
 {% for ingredient in good_ingredient_list %}
-    <li>{{ ingredient.amount|servings }} {{ ingredient.unit|unit }}{{ ingredient.amount|pluralize }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
+    <li class="list-group-item">{{ ingredient.amount|servings }} {{ ingredient.unit|unit }}{{ ingredient.amount|pluralize }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
 {% endfor %}
 {% for ingredient in recipe_ingredient_list %}
-    <li>{{ ingredient.servings|servings }} serving{{ ingredient.serving|pluralize }} <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
+    <li class="list-group-item">{{ ingredient.servings|servings }} serving{{ ingredient.serving|pluralize }} <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
 {% endfor %}
 </ul>
 
