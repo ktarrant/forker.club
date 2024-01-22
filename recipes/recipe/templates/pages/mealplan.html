@@ -16,11 +16,11 @@
 <ul class="list-group">
 {% for category, ingredients in combined_ingredient_list.items %}
     {% if ingredients %}
-    <li class="list-group-item">
+    <li class="list-group-item good-{{ category }}">
         {{ category|title }}
         <ul class="list-group">
         {% for ingredient in ingredients %}
-            <li class="list-group-item">{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }}</li>
+            <li class="list-group-item good-{{ category }}">{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }}</li>
         {% endfor %}
         </ul>
     </li>
@@ -34,7 +34,7 @@
     <h3>Ingredients</h3>
     <ul class="list-group">
     {% for ingredient in entry.ingredients %}
-        <li class="list-group-item">{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
+        <li class="list-group-item good-{{ ingredient.good.category }}">{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }} {{ ingredient.prep_method }}</li>
     {% endfor %}
     {% for ingredient in entry.recipe_ingredients %}
         <li class="list-group-item">{{ ingredient.servings|servings }} servings <a href="/{{ ingredient.recipe_ingredient.slug }}">{{ ingredient.recipe_ingredient.title }}</a></li>
