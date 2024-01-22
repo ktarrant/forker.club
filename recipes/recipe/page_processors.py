@@ -1,6 +1,8 @@
 import pint
 from django.shortcuts import render
 from mezzanine.pages.page_processors import processor_for
+
+from .measurements import good_categories
 from .models import Recipe, MealPlan, MealPlanEntry
 
 
@@ -118,14 +120,23 @@ def get_combined_ingredient_list(recipes):
     return list(ingredients.values())
 
 
+def tabulate_ingredient_list(ingredients):
+    tabulated = {}
+    for category in good_categories:
+        tabulated[category] = [ingredient for ingredient in ingredients
+                               if ingredient['good'].category == category]
+    return tabulated
+
+
 @processor_for(MealPlan)
 def meal_plan_render(request, page):
     recipes = compile_meal_plan(page.mealplan)
     for recipe_id in recipes:
         recipes[recipe_id]['content'] = recipes[recipe_id]['recipe'].content
 
-    combined_ingredient_list = get_combined_ingredient_list(recipes)
+    combined_ingredient_list = tabulate_ingredient_list(
+        get_combined_ingredient_list(recipes))
 
     context = {"recipes": list(recipes.values()),
-               "combined_ingredient_list": list(combined_ingredient_list)}
+               "combined_ingredient_list": combined_ingredient_list}
     return render(request, "pages/mealplan.html", context=context)

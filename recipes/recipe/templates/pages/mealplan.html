@@ -14,8 +14,17 @@
 
 <h2>Combined Ingredient List</h2>
 <ul>
-{% for ingredient in combined_ingredient_list %}
-    <li>{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }}</li>
+{% for category, ingredients in combined_ingredient_list.items %}
+    {% if ingredients %}
+    <li>
+        {{ category }}
+        <ul>
+        {% for ingredient in ingredients %}
+            <li>{{ ingredient.amount|servings }} {{ ingredient.unit|unit }} {{ ingredient.good.name }}</li>
+        {% endfor %}
+        </ul>
+    </li>
+    {% endif %}
 {% endfor %}
 </ul>
 
