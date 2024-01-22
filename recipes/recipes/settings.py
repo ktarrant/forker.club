@@ -38,11 +38,15 @@ from django.utils.translation import gettext_lazy as _
 # menus a page should appear in. Note that if a menu template is used
 # that doesn't appear in this setting, all pages will appear in it.
 
-# PAGE_MENU_TEMPLATES = (
-#     (1, _("Top navigation bar"), "pages/menus/dropdown.html"),
-#     (2, _("Left-hand tree"), "pages/menus/tree.html"),
-#     (3, _("Footer"), "pages/menus/footer.html"),
-# )
+# Remove the top navigation bar as an option
+PAGE_MENU_TEMPLATES = (
+    # (1, 'Top navigation bar', 'pages/menus/dropdown.html'),
+    (1, 'Left-hand tree', 'pages/menus/tree.html'),
+    (2, 'Footer', 'pages/menus/footer.html')
+)
+
+# By default, do not add pages to the tree menus
+PAGE_MENU_TEMPLATES_DEFAULT = []
 
 # A sequence of fields that will be injected into Mezzanine's (or any
 # library's) models. Each item in the sequence is a four item sequence.
@@ -83,16 +87,6 @@ SITE_TAGLINE = "Easy Recipes and Economical Meal Plans"
 # If True, the django-modeltranslation will be added to the
 # INSTALLED_APPS setting.
 USE_MODELTRANSLATION = False
-
-# Remove the left hand tree as an option
-PAGE_MENU_TEMPLATES = (
-    (1, 'Top navigation bar', 'pages/menus/dropdown.html'),
-    # (2, 'Left-hand tree', 'pages/menus/tree.html'),
-    (2, 'Footer', 'pages/menus/footer.html')
-)
-
-# By default, do not add pages to the tree menus
-PAGE_MENU_TEMPLATES_DEFAULT = []
 
 # Model to use for accounts profiles
 ACCOUNTS_PROFILE_MODEL = "recipe.MyProfile"
