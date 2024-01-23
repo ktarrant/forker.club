@@ -1,5 +1,8 @@
-# seasonal-food-scraper
-Scraper for downloading seasonal food data from the seasonal food guide
+# forker.club
+Recipe Blog built on top of Mezzanine/Django.
+Build recipes with ingredients in either weight or volume measurements.
+Tabulate a combined grocery list from multiple recipes, all converted to the same units.
+User accounts, ratings, and threaded comments.
 
 # Setup
 
