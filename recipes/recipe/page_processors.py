@@ -3,7 +3,7 @@ from django.shortcuts import render
 from mezzanine.pages.page_processors import processor_for
 
 from .measurements import good_categories
-from .models import Recipe, MealPlan, MealPlanEntry
+from .models import Recipe, MealPlan, MealPlanEntry, RecipeGallery
 
 
 @processor_for(Recipe)
@@ -140,3 +140,11 @@ def meal_plan_render(request, page):
     context = {"recipes": list(recipes.values()),
                "combined_ingredient_list": combined_ingredient_list}
     return render(request, "pages/mealplan.html", context=context)
+
+
+@processor_for(RecipeGallery)
+def recipe_gallery_render(request, page):
+    # TODO: Filter out unpublished
+    recipes = Recipe.objects.order_by("title")
+    context = {"all_recipes": recipes}
+    return render(request, "pages/recipegallery.html", context=context)

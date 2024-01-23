@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from mezzanine.pages.models import Page, RichText
 from mezzanine.generic.fields import CommentsField, RatingField
-
 from recipe.measurements import supported_units, good_categories
 
 UNIT_CHOICES = [(str(unit), str(unit).replace("_", " "))
@@ -91,3 +90,7 @@ class MealPlan(Page, RichText):
 class MyProfile(models.Model):
     user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
     bio = models.TextField(default="", null="", blank="")
+
+
+class RecipeGallery(Page):
+    pass
