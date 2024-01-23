@@ -12,7 +12,22 @@
 <div class="gallery row">
 {% for recipe in all_recipes %}
 <div class="col-xs-4 col-sm-3">
-    <a href="/{{ recipe.slug }}">{{ recipe.title }}</a>
+    <div class="card" style="width: 18rem;">
+        {% if recipe.image %}
+        {% with recipe.image as image %}
+        <a class="thumbnail" rel="#image-{{ image.id }}" title="{{ image.description }}" href="/{{ recipe.slug }}">
+            <img class="img-responsive" src="{{ MEDIA_URL }}{% thumbnail image.url 131 75 %}">
+        </a>
+        {% endwith %}
+        {% endif %}
+        <a href="/{{ recipe.slug }}">
+            <img src="" class="card-img-top" alt="">
+        </a>
+        <div class="card-body">
+            <h5 class="card-title">{{ recipe.title }}</h5>
+            <p class="card-text">{{ recipe.description }} <a href="/{{ recipe.slug }}"><em>See Recipe.</em></a></p>
+        </div>
+    </div>
 </div>
 {% endfor %}
 </div>

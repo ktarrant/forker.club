@@ -2,7 +2,10 @@ from typing import List
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from mezzanine.pages.models import Page, RichText
+from mezzanine.core.fields import FileField
 from mezzanine.generic.fields import CommentsField, RatingField
+from mezzanine.utils.models import upload_to
+
 from recipe.measurements import supported_units, good_categories
 
 UNIT_CHOICES = [(str(unit), str(unit).replace("_", " "))
@@ -58,6 +61,8 @@ class Recipe(Page, RichText):
     recipe_ingredients = models.ManyToManyField("Recipe", through=RecipeIngredient)
     rating = RatingField()
     comments = CommentsField()
+    image = FileField(max_length=200, format="Image",
+                      upload_to=upload_to("galleries.GalleryImage.file", "galleries"))
     search_fields = ('good_ingredients__name', 'recipe_ingredients__title', )
 
     class Meta:
@@ -93,4 +98,7 @@ class MyProfile(models.Model):
 
 
 class RecipeGallery(Page):
-    pass
+
+    class Meta:
+        verbose_name = _("Recipe Gallery")
+        verbose_name_plural = _("Recipe Galleries")
