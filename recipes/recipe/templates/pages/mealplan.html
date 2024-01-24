@@ -30,6 +30,7 @@
 
 {% for entry in recipes %}
     <h2>{{ entry.recipe.title }}</h2>
+    <img class="img-fluid" src="{{ entry.recipe.image.url }}">
     <em>Makes {{ entry.servings }} servings</em>
     <h3>Ingredients</h3>
     <ul class="list-group">

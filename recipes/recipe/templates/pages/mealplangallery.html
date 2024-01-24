@@ -1,0 +1,37 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "mezzanine/css/magnific-popup.css" %}">
+{% endblock extra_css %}
+
+{% block main %}
+{{ block.super }}
+
+<div class="gallery row">
+{% for mealplan in all_mealplans %}
+<div class="col-xs-4 col-sm-3">
+    <div class="card" style="width: 18rem;">
+        {% for recipe in mealplan.recipes %}
+            {% if recipe.image %}
+            {% with recipe.image as image %}
+            <a class="thumbnail" rel="#image-{{ image.id }}" title="{{ image.description }}" href="/{{ mealplan.slug }}">
+                <img class="card-img-top" src="{{ MEDIA_URL }}{% thumbnail image.url 131 75 %}">
+            </a>
+            {% endwith %}
+            {% endif %}
+        {% endfor %}
+        <div class="card-body">
+            <h5 class="card-title">{{ mealplan.title }}</h5>
+            <p class="card-text">
+                {{ mealplan.description }}<br>
+                Features recipes: {{ mealplan.recipe_summary }}<br>
+                <a href="/{{ mealplan.slug }}"><em>See Mealplan.</em></a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

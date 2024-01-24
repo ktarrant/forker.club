@@ -102,3 +102,10 @@ class RecipeGallery(Page):
     class Meta:
         verbose_name = _("Recipe Gallery")
         verbose_name_plural = _("Recipe Galleries")
+
+
+class MealPlanGallery(Page):
+
+    class Meta:
+        verbose_name = _("Meal Plan Gallery")
+        verbose_name_plural = _("Meal Plan Galleries")

@@ -3,7 +3,7 @@ from django.shortcuts import render
 from mezzanine.pages.page_processors import processor_for
 
 from .measurements import good_categories
-from .models import Recipe, MealPlan, MealPlanEntry, RecipeGallery
+from .models import Recipe, MealPlan, MealPlanEntry, RecipeGallery, MealPlanGallery
 
 
 @processor_for(Recipe)
@@ -148,3 +148,22 @@ def recipe_gallery_render(request, page):
     recipes = Recipe.objects.order_by("title")
     context = {"all_recipes": recipes}
     return render(request, "pages/recipegallery.html", context=context)
+
+
+@processor_for(MealPlanGallery)
+def meal_plan_gallery_render(request, page):
+    # TODO: Filter out unpublished
+    mealplans = []
+    for mealplan in MealPlan.objects.order_by("title"):
+        recipes = [recipe for recipe in mealplan.mealplan_entries.all()
+                   if recipe.image]
+        entry = {
+            "title": mealplan.title,
+            "description": mealplan.description,
+            "recipes": recipes[:1],  # TODO: Update template to support multiple thumbnails
+            "recipe_summary": ", ".join([recipe.title for recipe in mealplan.mealplan_entries.all()]),
+            "slug": mealplan.slug,
+        }
+        mealplans += [entry]
+    context = {"all_mealplans": mealplans}
+    return render(request, "pages/mealplangallery.html", context=context)

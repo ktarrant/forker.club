@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from django.contrib import admin
-from recipe.models import Recipe, Good, MealPlan, RecipeGallery
+from recipe.models import Recipe, Good, MealPlan, RecipeGallery, MealPlanGallery
 
 
 class GoodIngredientInline(admin.TabularInline):
@@ -38,3 +38,4 @@ admin.site.register(Good)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(MealPlan, MealPlanAdmin)
 admin.site.register(RecipeGallery)
+admin.site.register(MealPlanGallery)
